@@ -58,7 +58,10 @@ class NewMember extends StatelessWidget {
             ),
           ),
           Container(height: 48,),
-          SelectButton(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20,),
+            child: SelectButton(),
+          ),
         ]
       ),
     );
@@ -109,62 +112,63 @@ class _SelectButtonState extends State<SelectButton> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 20,),
-          child: CustomRadioButton(
-            height: 48,
-            elevation: 0,
-            horizontal: true,
-            enableShape: true,
-            unSelectedBorderColor: Colors.transparent,
-            selectedBorderColor: Colors.transparent,
-            spacing: 0,
-            unSelectedColor: Style.light_purple,
-            buttonLables: [
-              '초산이에요',
-              '경산이에요',
-            ],
-            buttonValues: [
-              true,
-              false,
-            ],
-            buttonTextStyle: ButtonTextStyle(
-                selectedColor: Colors.white,
-                unSelectedColor: Colors.white,
-                textStyle: TextStyle(fontSize: 16),
-            ),
-            radioButtonValue: (value) {
-              setState(() {
-                _select=value;
-              });
-            },
-            selectedColor: Style.bg_purple,
-
+        CustomRadioButton(
+          height: 48,
+          elevation: 0,
+          horizontal: true,
+          enableShape: true,
+          unSelectedBorderColor: Colors.transparent,
+          selectedBorderColor: Colors.transparent,
+          spacing: 0,
+          unSelectedColor: Style.light_purple,
+          buttonLables: [
+            '초산이에요',
+            '경산이에요',
+          ],
+          buttonValues: [
+            true,
+            false,
+          ],
+          buttonTextStyle: ButtonTextStyle(
+              selectedColor: Colors.white,
+              unSelectedColor: Colors.white,
+              textStyle: TextStyle(fontSize: 16),
           ),
+          radioButtonValue: (value) {
+            setState(() {
+              _select=value;
+            });
+          },
+          selectedColor: Style.bg_purple,
+
         ),
         Container(
           height: 177,
         ),
-        ElevatedButton(
-            onPressed: () {
-              if(_select == true || _select == false)
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NewMemberSecond()));
-            },
-            child: Text('다음',
-              style: TextStyle(
-                fontSize: 16,
+        Container(
+          width: double.infinity,
+          height: 48,
+          child: ElevatedButton(
+              onPressed: () {
+                if(_select == true || _select == false)
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NewMemberSecond()));
+              },
+              child: Text(
+                '다음',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: (_select == true || _select == false) ? Style.bg_purple : Style.bg_light_gray,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: (_select == true || _select == false) ? Style.bg_purple : Style.bg_light_gray,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                shadowColor: Colors.transparent,
               ),
-              fixedSize: Size(340, 48),
-              shadowColor: Colors.transparent,
-            ),
+          ),
         ),
       ],
     );

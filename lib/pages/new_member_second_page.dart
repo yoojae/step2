@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:step2/global_assets/style.dart';
+import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
+
 
 class NewMemberSecond extends StatelessWidget {
   const NewMemberSecond({Key? key}) : super(key: key);
@@ -6,9 +10,244 @@ class NewMemberSecond extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.red,),
+        leading: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black,),
+        elevation: 0,
+        backgroundColor: Colors.white,
       ),
+      body: Column(
+          children: [
+            Navigation(),
+            Container(height: 40,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(text:
+                  const TextSpan(
+                      text: '단태아/다태아 여부',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '를',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ]
+                  ),
+                  ),
+                  Text('선택해 주세요',
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
+                  Container(height: 15,),
+                  Text('입력한 정보는 ‘마이페이지 > 개인정보 수정’에서 수정이 가능합니다.',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(height: 48,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,),
+              child: SelectButton(),
+            ),
+          ]
+      ),
+    );
+  }
+}
+
+
+class Navigation extends StatefulWidget {
+  const Navigation({Key? key}) : super(key: key);
+
+  @override
+  State<Navigation> createState() => _NavigationState();
+}
+
+class _NavigationState extends State<Navigation> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        for(int i=0; i<=6; i++)
+          if(i<3)
+            SvgPicture.asset(
+                'images/svg/bar_color.svg'
+            )
+          else if(i>3)
+            SvgPicture.asset(
+                'images/svg/bar_none.svg'
+            )
+      ],
+    );
+  }
+}
+
+
+class SelectButton extends StatefulWidget {
+  const SelectButton({Key? key}) : super(key: key);
+
+  @override
+  State<SelectButton> createState() => _SelectButtonState();
+}
+
+class _SelectButtonState extends State<SelectButton> {
+  var _select;
+
+  late int totalCount=0;
+
+  void addCount() {
+    setState(() {
+      totalCount=totalCount + 1;
+    });
+  }
+
+  void minusCount() {
+    setState(() {
+      if(totalCount>0) {
+        totalCount = totalCount - 1;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CustomRadioButton(
+          height: 48,
+          elevation: 0,
+          horizontal: true,
+          enableShape: true,
+          unSelectedBorderColor: Colors.transparent,
+          selectedBorderColor: Colors.transparent,
+          spacing: 0,
+          unSelectedColor: Style.light_purple,
+          buttonLables: [
+            '단태아',
+            '다태아',
+          ],
+          buttonValues: [
+            true,
+            false,
+          ],
+          buttonTextStyle: ButtonTextStyle(
+            selectedColor: Colors.white,
+            unSelectedColor: Colors.white,
+            textStyle: TextStyle(fontSize: 16),
+          ),
+          radioButtonValue: (value) {
+            setState(() {
+              _select=value;
+            });
+          },
+          selectedColor: Style.bg_purple,
+
+        ),
+        Visibility(
+          visible: _select == false ? true : false,
+            child: Container(
+              width: double.infinity,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Style.bg_light_more_gray,
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(onPressed: minusCount,
+                    icon: Icon(Icons.remove_circle_outline_rounded, color: Style.icon_gray, size: 16),),
+                  Text('$totalCount명',
+                    style: TextStyle(
+                      color: (totalCount>=1) ? Style.bg_darkgray : Style.icon_gray,
+                      fontSize: 16,
+                    ),
+                  ),
+                  IconButton(onPressed: addCount,
+                    icon: Icon(Icons.add_circle_outline_rounded, color: Style.icon_gray, size: 16,),),
+                ],
+              ),
+            ),
+        ),
+        Container(height:  _select == false ? 71: 0,),
+        Visibility(
+          visible: _select == false ? true : false,
+          child: Container(
+              width: 224,
+              height: 34,
+              decoration: BoxDecoration(
+                color: Style.attention_gray,
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: Style.light_yellow,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                        child: SvgPicture.asset('images/svg/ic_snack_caution.svg'),
+                    ),
+                  ),
+                  Container(width: 8,),
+                  Text('다태아의 명수를 입력해 주세요.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                  ),),
+                ],
+              ),
+            ),
+        ),
+        Container(
+          height: _select == false ? 16: 177,
+        ),
+        Container(
+          width: double.infinity,
+          height: 48,
+          child: ElevatedButton(
+            onPressed: () {
+              if(_select == true || _select == false)
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NewMemberSecond()));
+            },
+            child: Text(
+              '다음',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: (_select == true || totalCount >= 1) ? Style.bg_purple : Style.bg_light_gray,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              shadowColor: Colors.transparent,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

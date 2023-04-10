@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.4
   custom_radio_grouped_button: ^2.2.0
+  quantity_input: ^1.0.2
 
 dev_dependencies:
   flutter_test:
